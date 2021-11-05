@@ -42,15 +42,21 @@ int main(){
         glfwTerminate();
         return -1;
     }
+	else{
+		std::cout << "Succesfully created GLFW window" << std::endl;
+	}
 
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
-	if (!glewInit() == GLEW_OK){
+	if (glewInit() != GLEW_OK){
         std::cout << "Failed to initialize GLEW" << std::endl;
         return -1;
     }
+	else{
+		std::cout << "Succesfully initialize GLEW" << std::endl;
+	}
 
 	std::ifstream t("./Shaders/vertex.glsl");
 	t.seekg(0,std::ios::end);
@@ -87,12 +93,6 @@ int main(){
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
 	glCompileShader(fragmentShader);
 
-	glGetShaderiv(fragmentShader, GL_COMPILE, &success);
-	if(!success) {
-		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
 	unsigned int shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
@@ -107,9 +107,9 @@ int main(){
 	glDeleteShader(fragmentShader);
 	
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
+		-0.5f, -0.4f, 0.0f,
 		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+		 0.0f,  0.5f, 0.1f
 	};
 	unsigned int VBO, VAO;
 
@@ -139,7 +139,6 @@ int main(){
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
 	}	
 	glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
